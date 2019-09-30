@@ -3,18 +3,78 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>/</loc>
-    <priority>0</priority>
+    <loc>https://jimmysong.io/eng-practices/docs/review/</loc>
+    <lastmod>2019-09-30T18:10:35+08:00</lastmod>
   </url>
   
   <url>
-    <loc>/categories/</loc>
-    <priority>0</priority>
+    <loc>https://jimmysong.io/eng-practices/docs/</loc>
+    <lastmod>2019-09-30T18:10:35+08:00</lastmod>
   </url>
   
   <url>
-    <loc>/tags/</loc>
-    <priority>0</priority>
+    <loc>https://jimmysong.io/eng-practices/docs/review/developer/</loc>
+    <lastmod>2019-09-30T18:10:35+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://jimmysong.io/eng-practices/docs/review/reviewer/</loc>
+    <lastmod>2019-09-30T18:10:35+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://jimmysong.io/eng-practices/docs/review/reviewer/standard/</loc>
+    <lastmod>2019-09-30T18:10:35+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://jimmysong.io/eng-practices/docs/review/reviewer/looking-for/</loc>
+    <lastmod>2019-09-30T18:10:35+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://jimmysong.io/eng-practices/docs/review/reviewer/speed/</loc>
+    <lastmod>2019-09-30T18:10:35+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://jimmysong.io/eng-practices/docs/review/developer/cl-descriptions/</loc>
+    <lastmod>2019-09-30T18:10:35+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://jimmysong.io/eng-practices/docs/review/reviewer/pushback/</loc>
+    <lastmod>2019-09-30T18:10:35+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://jimmysong.io/eng-practices/docs/review/developer/handling-comments/</loc>
+    <lastmod>2019-09-30T18:10:35+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://jimmysong.io/eng-practices/docs/review/reviewer/comments/</loc>
+    <lastmod>2019-09-30T18:10:35+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://jimmysong.io/eng-practices/docs/review/developer/small-cls/</loc>
+    <lastmod>2019-09-30T18:10:35+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://jimmysong.io/eng-practices/docs/review/reviewer/navigate/</loc>
+    <lastmod>2019-09-30T18:30:58+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://jimmysong.io/eng-practices/docs/review/emergencies/</loc>
+    <lastmod>2019-09-30T18:10:35+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://jimmysong.io/eng-practices/</loc>
+    <lastmod>2019-09-30T18:10:35+08:00</lastmod>
   </url>
   
 </urlset>
