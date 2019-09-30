@@ -2,10 +2,9 @@
 <html lang="en">
 
 <head>
-	<meta name="generator" content="Hugo 0.55.5" />
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>谷歌工程实践 | 谷歌工程实践</title>
+<title>紧急情况 | 谷歌工程实践</title>
 
 
 <link rel="stylesheet" href="/eng-practices/book.min.3b2edc99087fbcaaa6b2f5a7f984e6f6bb9c1245c757de04c44f5a738d1b52c1.css" integrity="sha256-Oy7cmQh/vKqmsvWn&#43;YTm9rucEkXHV94ExE9ac40bUsE=">
@@ -18,7 +17,6 @@
 <link rel="icon" href="/eng-practices/favicon.png" type="image/x-icon">
 
 
-<link rel="alternate" type="application/rss+xml" href="https://jimmysong.io/eng-practices/index.xml" title="谷歌工程实践" />
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -77,7 +75,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   
 
   <style>
-  nav ul a[href$="\2f eng-practices\2f "] {
+  nav ul a[href$="\2f eng-practices\2f docs\2freview\2f emergencies\2f "] {
       color: #004ed0;
   }
   </style>
@@ -129,54 +127,54 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <label for="menu-control">
     <img src="/eng-practices/svg/menu.svg" alt="Menu" />
   </label>
-  <strong>谷歌工程实践</strong>
+  <strong>紧急情况</strong>
 </header>
 
       
 <article class="markdown">
 
-<h1 id="谷歌工程实践文档">谷歌工程实践文档</h1>
+<h1 id="紧急情况">紧急情况</h1>
 
-<p>Google 有许多通用工程实践，几乎涵盖所有语言和项目。此文档为长期积累的最佳实践，是集体经验的结晶。我们尽可能地将其公之于众，您的组织和开源项目也会从中受益。</p>
+<p>有时候紧急 CL 必须尽快通过 code review 过程。</p>
 
-<p>当前包含以下文档：</p>
+<h2 id="what">什么是紧急情况？</h2>
+
+<p>紧急 CL 是这样的<strong>小</strong>更新：允许主要发布继续而不是回滚，修复显着影响用户生产的错误，处理紧迫的法律问题，关闭主要安全漏洞等。</p>
+
+<p>在紧急情况下，我们确实关心 Code Review 的整体速度，而不仅仅是响应的速度。仅在这种情况下，审查人员应该更关心审查的速度和代码的正确性（是否解决了紧急情况？）。此外（显然）这类状况的审查应该优先于所有其他 code reivew。</p>
+
+<p>但是，在紧急情况解决后，您应该再次查看紧急 CL 并进行<a href="reviewer/looking-for">更彻底的审查</a>。</p>
+
+<h2 id="not">什么不是紧急情况？</h2>
+
+<p>需要说明的是，以下情况并非紧急情况：</p>
 
 <ul>
-<li><a href="docs/review">Google 代码审查指南</a>，实则两套指南：
-
-<ul>
-<li><a href="docs/review/reviewer">代码审查者指南</a></li>
-<li><a href="docs/review/developer">代码开发者指南</a></li>
-</ul></li>
+<li>想要在本周而不是下周推出（除非有一些实际<a href="#deadlines">硬性截止日期</a>，例如合作伙伴协议）。</li>
+<li>开发人员已经在很长一段时间内完成了一项功能想要获得 CL。</li>
+<li>审查者都在另一个时区，目前是夜间或他们已离开现场。</li>
+<li>现在是星期五，在开发者在过周末之前获得这个 CL 会很棒。</li>
+<li>今天因为<a href="#deadlines">软（非硬）截止日期</a>，经理表示必须完成此审核并签入 CL。</li>
+<li>回滚导致测试失败或构建破坏的 CL。</li>
 </ul>
 
-<h2 id="术语">术语</h2>
+<p>等等。</p>
 
-<p>文档中使用了 Google 内部术语，在此为外部读者澄清：</p>
+<h2 id="deadlines">什么是 Hard Deadline？</h2>
 
-<ul>
-<li><strong>CL</strong>：代表“变更列表（changelist）”，表示已提交到版本控制或正在进行代码审查的自包含更改。有的组织会将其称为“变更（change）”或“补丁（patch）”。</li>
-<li><strong>LGTM</strong>：意思是“我觉得不错（Looks Good to Me）”。这是批准 CL 时代码审查者所说的。</li>
-</ul>
-
-<h2 id="译者序">译者序</h2>
-
-<p>此仓库翻译自 <a href="https://github.com/google/eng-practices">google/eng-practices</a>，目前为止的主要内容为 Google 总结的如何进行 <strong>Code Review（代码审查）</strong> 指南，根据原 Github 仓库的标题判断以后会追加更多 Google 工程实践的内容。</p>
+<p>硬性截止日期（Hard Deadline）是指如果你错过它会发生灾难性的事情。例如：</p>
 
 <ul>
-<li>本文档的 Github 地址：<a href="https://github.com/rootsongjc/eng-practices">https://github.com/rootsongjc/eng-practices</a>，点击页面底部的 <code>Edit this page</code> 链接可以编辑页面。</li>
-<li>其他语言的版本请访问 <a href="https://github.com/eng-practices/eng-practices">https://github.com/eng-practices/eng-practices</a>。</li>
-<li>感谢 <a href="https://github.com/life1347">Ta-Ching Chen</a> 的审阅。</li>
-<li>译者：<a href="https://jimmysong.io">Jimmy Song</a></li>
-<li>本网站使用 <a href="https://gohugo.io">Hugo</a> 构建。</li>
-<li>本网站使用 <a href="https://github.com/alex-shpak/hugo-book">hugo-book</a> 主题。</li>
+<li>对于合同义务，必须在特定日期之前提交 CL。</li>
+<li>如果在某个日期之前没有发布，您的产品将在市场上完全失败。</li>
+<li>一些硬件制造商每年只发送一次新硬件。如果您错过了向他们提交代码的截止日期，那么这可能是灾难性的，具体取决于您尝试发布的代码类型。</li>
 </ul>
 
-<h2 id="license">License</h2>
+<p>延迟发布一周并不是灾难性的。错过重要会议可能是灾难性的，但往往不是。</p>
 
-<p>本项目中的文档适用于 CC-By 3.0 许可证，该许可证鼓励您共享这些文档。有关详细信息，请参阅 <a href="https://creativecommons.org/licenses/by/3.0/">https://creativecommons.org/licenses/by/3.0/</a>。</p>
+<p>大多数截止日期都是软截止日期，而非最后期限。软截止日期表示希望在特定时间内完成某项功能。它们很重要，但你不应该以牺牲代码健康为前提来达到。</p>
 
-<p><a rel="license" href="https://creativecommons.org/licenses/by/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/3.0/88x31.png" /></a></p>
+<p>如果您的发布周期很长（几周），那么在下一个周期之前就可能会牺牲代码审查质量来获取功能。然而，如果重复这种模式，往往会给项目建立压倒性技术债务。如果开发人员在周期结束时经常提交 CL，只需要进行表面评审就必须“进入”，那么团队应该修改其流程，以便在周期的早期发生大的功能变更，并有足够的时间进行良好的审查。</p>
 </article>
 
       
@@ -184,7 +182,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   
   
   <div>
-    <a href="https://github.com/rootsongjc/eng-practices/edit/master/content/_index.md" target="_blank" rel="noopener">
+    <a href="https://github.com/rootsongjc/eng-practices/edit/master/content/docs/review/emergencies.md" target="_blank" rel="noopener">
       <img src="/eng-practices/svg/edit.svg" alt="Edit" /> Edit this page
     </a>
   </div>
@@ -201,11 +199,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <aside class="book-toc level-3 fixed">
     <nav id="TableOfContents">
 <ul>
-<li><a href="#谷歌工程实践文档">谷歌工程实践文档</a>
+<li><a href="#紧急情况">紧急情况</a>
 <ul>
-<li><a href="#术语">术语</a></li>
-<li><a href="#译者序">译者序</a></li>
-<li><a href="#license">License</a></li>
+<li><a href="#what">什么是紧急情况？</a></li>
+<li><a href="#not">什么不是紧急情况？</a></li>
+<li><a href="#deadlines">什么是 Hard Deadline？</a></li>
 </ul></li>
 </ul>
 </nav>

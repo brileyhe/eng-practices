@@ -2,10 +2,9 @@
 <html lang="en">
 
 <head>
-	<meta name="generator" content="Hugo 0.55.5" />
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>谷歌工程实践 | 谷歌工程实践</title>
+<title>开发者代码审查指南 | 谷歌工程实践</title>
 
 
 <link rel="stylesheet" href="/eng-practices/book.min.3b2edc99087fbcaaa6b2f5a7f984e6f6bb9c1245c757de04c44f5a738d1b52c1.css" integrity="sha256-Oy7cmQh/vKqmsvWn&#43;YTm9rucEkXHV94ExE9ac40bUsE=">
@@ -18,7 +17,7 @@
 <link rel="icon" href="/eng-practices/favicon.png" type="image/x-icon">
 
 
-<link rel="alternate" type="application/rss+xml" href="https://jimmysong.io/eng-practices/index.xml" title="谷歌工程实践" />
+<link rel="alternate" type="application/rss+xml" href="https://jimmysong.io/eng-practices/docs/review/index.xml" title="谷歌工程实践" />
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -77,7 +76,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   
 
   <style>
-  nav ul a[href$="\2f eng-practices\2f "] {
+  nav ul a[href$="\2f eng-practices\2f docs\2freview\2f "] {
       color: #004ed0;
   }
   </style>
@@ -129,54 +128,66 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <label for="menu-control">
     <img src="/eng-practices/svg/menu.svg" alt="Menu" />
   </label>
-  <strong>谷歌工程实践</strong>
+  <strong>开发者代码审查指南</strong>
 </header>
 
       
 <article class="markdown">
 
-<h1 id="谷歌工程实践文档">谷歌工程实践文档</h1>
+<h1 id="开发者代码审查指南">开发者代码审查指南</h1>
 
-<p>Google 有许多通用工程实践，几乎涵盖所有语言和项目。此文档为长期积累的最佳实践，是集体经验的结晶。我们尽可能地将其公之于众，您的组织和开源项目也会从中受益。</p>
+<h2 id="intro">简介</h2>
 
-<p>当前包含以下文档：</p>
+<p>代码审查是除了代码作者之外，其他人检查代码的过程。</p>
+
+<p>Google 通过 Code Review 来维护代码和产品质量。</p>
+
+<p>此文档是 Google Code Review 流程和政策的规范说明。</p>
+
+<p>此页面是我们进行 Code Review 流程的概述。本指南还有另外两套文档：</p>
 
 <ul>
-<li><a href="docs/review">Google 代码审查指南</a>，实则两套指南：
-
-<ul>
-<li><a href="docs/review/reviewer">代码审查者指南</a></li>
-<li><a href="docs/review/developer">代码开发者指南</a></li>
-</ul></li>
+<li><strong><a href="reviewer/">如何进行 Code Review</a></strong>：针对代码审查者的详细指南。</li>
+<li><strong><a href="developer/">代码开发者指南</a></strong>：针对 CL 开发者的的详细指南。</li>
 </ul>
 
-<h2 id="术语">术语</h2>
+<h2 id="look_for">代码审查者应该关注哪些方面？</h2>
 
-<p>文档中使用了 Google 内部术语，在此为外部读者澄清：</p>
-
-<ul>
-<li><strong>CL</strong>：代表“变更列表（changelist）”，表示已提交到版本控制或正在进行代码审查的自包含更改。有的组织会将其称为“变更（change）”或“补丁（patch）”。</li>
-<li><strong>LGTM</strong>：意思是“我觉得不错（Looks Good to Me）”。这是批准 CL 时代码审查者所说的。</li>
-</ul>
-
-<h2 id="译者序">译者序</h2>
-
-<p>此仓库翻译自 <a href="https://github.com/google/eng-practices">google/eng-practices</a>，目前为止的主要内容为 Google 总结的如何进行 <strong>Code Review（代码审查）</strong> 指南，根据原 Github 仓库的标题判断以后会追加更多 Google 工程实践的内容。</p>
+<p>代码审查时应该关注以下方面：</p>
 
 <ul>
-<li>本文档的 Github 地址：<a href="https://github.com/rootsongjc/eng-practices">https://github.com/rootsongjc/eng-practices</a>，点击页面底部的 <code>Edit this page</code> 链接可以编辑页面。</li>
-<li>其他语言的版本请访问 <a href="https://github.com/eng-practices/eng-practices">https://github.com/eng-practices/eng-practices</a>。</li>
-<li>感谢 <a href="https://github.com/life1347">Ta-Ching Chen</a> 的审阅。</li>
-<li>译者：<a href="https://jimmysong.io">Jimmy Song</a></li>
-<li>本网站使用 <a href="https://gohugo.io">Hugo</a> 构建。</li>
-<li>本网站使用 <a href="https://github.com/alex-shpak/hugo-book">hugo-book</a> 主题。</li>
+<li><strong>设计</strong>：代码是否经过精心设计并适合您的系统？</li>
+<li><strong>功能</strong>：代码的行为是否与作者的意图相同？代码是否可以正常响应用户的行为？</li>
+<li><strong>复杂度</strong>：代码能更简单吗？将来其他开发人员能轻松理解并使用此代码吗？</li>
+<li><strong>测试</strong>：代码是否具有正确且设计良好的自动化测试？</li>
+<li><strong>命名</strong>：开发人员是否为变量、类、方法等选择了明确的名称？</li>
+<li><strong>注释</strong>：评论是否清晰有用？</li>
+<li><strong>风格</strong>：代码是否遵守了<a href="http://google.github.io/styleguide/">风格指南</a>？</li>
+<li><strong>文档</strong>：开发人员是否同时更新了相关文档？</li>
 </ul>
 
-<h2 id="license">License</h2>
+<p>参阅<strong><a href="reviewer/">如何进行 Code Review</a></strong> 获取更多资料。</p>
 
-<p>本项目中的文档适用于 CC-By 3.0 许可证，该许可证鼓励您共享这些文档。有关详细信息，请参阅 <a href="https://creativecommons.org/licenses/by/3.0/">https://creativecommons.org/licenses/by/3.0/</a>。</p>
+<h3 id="best_reviewers">选择最合适审查者</h3>
 
-<p><a rel="license" href="https://creativecommons.org/licenses/by/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/3.0/88x31.png" /></a></p>
+<p>一般而言，您希望找到能在合理的时间内回复您的评论的最合适的审查者。</p>
+
+<p>最合适的审查者应该是能彻底了解和审查您代码的人。他们通常是代码的所有者，可能是  OWNERS 文件中的人，也可能不是。有时 CL 的不同部分可能需要不同的人审查。</p>
+
+<p>如果您找到了理想的审查者但他们又没空，那您也至少要抄送他们。</p>
+
+<h3 id="in_person">面对面审查</h3>
+
+<p>如果您与有资格做代码审查的人一起结对编程了一段代码，那么该代码将被视为已审查。</p>
+
+<p>您还可以进行面对面的代码审查，审查者提问，CL 的开发人员作答。</p>
+
+<h2 id="seealso">参考</h2>
+
+<ul>
+<li><a href="reviewer/">如何进行 Code Review</a>：针对代码审查者的详细指南。</li>
+<li><a href="developer/">代码开发者指南</a>：针对 CL 开发者的的详细指南。</li>
+</ul>
 </article>
 
       
@@ -184,7 +195,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   
   
   <div>
-    <a href="https://github.com/rootsongjc/eng-practices/edit/master/content/_index.md" target="_blank" rel="noopener">
+    <a href="https://github.com/rootsongjc/eng-practices/edit/master/content/docs/review/_index.md" target="_blank" rel="noopener">
       <img src="/eng-practices/svg/edit.svg" alt="Edit" /> Edit this page
     </a>
   </div>
@@ -201,11 +212,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <aside class="book-toc level-3 fixed">
     <nav id="TableOfContents">
 <ul>
-<li><a href="#谷歌工程实践文档">谷歌工程实践文档</a>
+<li><a href="#开发者代码审查指南">开发者代码审查指南</a>
 <ul>
-<li><a href="#术语">术语</a></li>
-<li><a href="#译者序">译者序</a></li>
-<li><a href="#license">License</a></li>
+<li><a href="#intro">简介</a></li>
+<li><a href="#look_for">代码审查者应该关注哪些方面？</a>
+<ul>
+<li><a href="#best_reviewers">选择最合适审查者</a></li>
+<li><a href="#in_person">面对面审查</a></li>
+</ul></li>
+<li><a href="#seealso">参考</a></li>
 </ul></li>
 </ul>
 </nav>

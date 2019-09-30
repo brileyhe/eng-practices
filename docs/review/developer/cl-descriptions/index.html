@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>写好 CL 描述 | 谷歌工程实践</title>
+
+
+<link rel="stylesheet" href="/eng-practices/book.min.3b2edc99087fbcaaa6b2f5a7f984e6f6bb9c1245c757de04c44f5a738d1b52c1.css" integrity="sha256-Oy7cmQh/vKqmsvWn&#43;YTm9rucEkXHV94ExE9ac40bUsE=">
+
+
+<script defer src="/eng-practices/search.min.4834e7e0e267233731129f6a2972a69d565a00b73996cf0ecd0477c7838d55ba.js" integrity="sha256-SDTn4OJnIzcxEp9qKXKmnVZaALc5ls8OzQR3x4ONVbo="></script>
+
+
+
+<link rel="icon" href="/eng-practices/favicon.png" type="image/x-icon">
+
+
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+  
+<meta name="baidu-site-verification" content="g8IYR9SNLF" />
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?11f7d254cfa4e0ca44b175c66d379ecc";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-TRBZ6RN');</script>
+
+
+</head>
+
+<body>
+  <input type="checkbox" class="hidden" id="menu-control" />
+  <main class="flex container">
+
+    <aside class="book-menu fixed">
+      <nav>
+<h2 class="book-brand">
+  <a href="https://jimmysong.io/eng-practices"><span>谷歌工程实践</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" placeholder="Search" id="book-search-input" maxlength="64" readonly />
+  <div class="book-search-spinner spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+    
+  
+  
+  
+
+  <style>
+  nav ul a[href$="\2f eng-practices\2f docs\2freview\2f developer\2f cl-descriptions\2f "] {
+      color: #004ed0;
+  }
+  </style>
+
+<ul>
+<li><a href="/eng-practices/docs/review/"><strong>谷歌代码审查指南</strong></a></li>
+<li><a href="/eng-practices/docs/review/reviewer/"><strong>代码审查者指南</strong></a>
+
+<ul>
+<li><a href="/eng-practices/docs/review/reviewer/standard/">Code Review 标准</a></li>
+<li><a href="/eng-practices/docs/review/reviewer/looking-for/">Code Review 要点</a></li>
+<li><a href="/eng-practices/docs/review/reviewer/navigate/">查看 CL 的步骤</a></li>
+<li><a href="/eng-practices/docs/review/reviewer/speed/">Code Review 速度</a></li>
+<li><a href="/eng-practices/docs/review/reviewer/comments/">如何撰写 Code Review 评论</a></li>
+<li><a href="/eng-practices/docs/review/reviewer/pushback/">处理 Code Review 中的拖延</a></li>
+</ul></li>
+<li><a href="/eng-practices/docs/review/developer/"><strong>代码开发者指南</strong></a>
+
+<ul>
+<li><a href="/eng-practices/docs/review/developer/cl-descriptions/">写好 CL 描述</a></li>
+<li><a href="/eng-practices/docs/review/developer/small-cls/">小型 CL</a></li>
+<li><a href="/eng-practices/docs/review/developer/handling-comments/">如何处理审查者的评论</a></li>
+</ul></li>
+</ul>
+
+
+
+
+
+
+
+</nav>
+
+
+<script>
+(function() {
+  var menu = document.querySelector("aside.book-menu nav");
+  addEventListener("beforeunload", function(event) {
+    localStorage.setItem("menu.scrollTop", menu.scrollTop);
+  });
+  menu.scrollTop = localStorage.getItem("menu.scrollTop");
+})();
+</script>
+
+    </aside>
+
+    <div class="book-page">
+      <header class="flex align-center justify-between book-header">
+  <label for="menu-control">
+    <img src="/eng-practices/svg/menu.svg" alt="Menu" />
+  </label>
+  <strong>写好 CL 描述</strong>
+</header>
+
+      
+<article class="markdown">
+
+<h1 id="写好-cl-描述">写好 CL 描述</h1>
+
+<p>CL 描述是进行了<strong>哪些更改</strong>以及<strong>为何更改</strong>的公开记录。CL 将作为版本控制系统中的永久记录，可能会在长时期内被除审查者之外的数百人阅读。</p>
+
+<p>开发者将来会根据描述搜索您的 CL。有人可能会仅凭有关联性的微弱印象，但没有更多具体细节的情况下，来查找你的改动。如果所有重要信息都在代码而不是描述中，那么会让他们更加难以找到你的 CL 。</p>
+
+<h2 id="firstline">首行</h2>
+
+<ul>
+<li>正在做什么的简短摘要。</li>
+<li>完整的句子，使用祈使句。</li>
+<li>后面跟一个空行。</li>
+</ul>
+
+<p>CL 描述的<strong>第一行</strong>应该是关于这个 CL 是<strong>做什么</strong>的简短摘要，后面跟一个空白行。这是将来大多数的代码搜索者在浏览代码的版本控制历史时，最常被看到的内容，因此第一行应该提供足够的信息，以便他们不必阅读 CL 的整个描述就可以获得这个 CL 实际上是做了什么的信息。</p>
+
+<p>按照传统，CL 描述的第一行应该是一个完整的句子，就好像是一个命令（一个命令句）。例如，“<strong>Delete</strong> the FizzBuzz RPC and <strong>replace</strong> it with the new system.”而不是“<strong>Deleting</strong> the FizzBuzz RPC and <strong>replacing</strong> it with the new system.“ 但是，您不必把其余的描述写成祈使句。</p>
+
+<h2 id="informative">Body 是信息丰富的</h2>
+
+<p>其余描述应该是提供信息的。可能包括对正在解决的问题的简要描述，以及为什么这是最好的方法。如果方法有任何缺点，应该提到它们。如果相关，请包括背景信息，例如错误编号，基准测试结果以及设计文档的链接。</p>
+
+<p>即使是小型 CL 也需要注意细节。在 CL 描述中提供上下文以供参照。</p>
+
+<h2 id="bad">糟糕的 CL 描述</h2>
+
+<p>“Fix bug ”是一个不充分的 CL 描述。什么 bug？你做了什么修复？其他类似的不良描述包括：</p>
+
+<ul>
+<li>&ldquo;Fix build.&rdquo;</li>
+<li>&ldquo;Add patch.&rdquo;</li>
+<li>&ldquo;Moving code from A to B.&rdquo;</li>
+<li>&ldquo;Phase 1.&rdquo;</li>
+<li>&ldquo;Add convenience functions.&rdquo;</li>
+<li>&ldquo;kill weird URLs.&rdquo;</li>
+</ul>
+
+<p>其中一些是真正的 CL 描述。他们的作者可能认为自己提供了有用的信息，却没有达到 CL 描述的目的。</p>
+
+<h2 id="good">好的 CL 描述</h2>
+
+<p>以下是一些很好的描述示例。</p>
+
+<h3 id="功能更新">功能更新</h3>
+
+<blockquote>
+<p>rpc：删除 RPC 服务器消息 freelist 上的大小限制。</p>
+
+<p>像 FIzzBuzz 这样的服务器有非常大的消息，并且可以从重用中受益。增大 freelist，添加一个 goroutine，缓慢释放 freelist 条目，以便空闲服务器最终释放所有 freelist 条目。</p>
+</blockquote>
+
+<p>前几个词描述了CL实际上做了什么。其余的描述讨论了正在解决的问题，为什么这是一个很好的解决方案，以及有关具体实现的更多信息。</p>
+
+<h3 id="重构">重构</h3>
+
+<blockquote>
+<p>Construct a Task with a TimeKeeper to use its TimeStr and Now methods.</p>
+
+<p>Add a Now method to Task, so the borglet() getter method can be removed (which was only used by OOMCandidate to call borglet&rsquo;s Now method). This replaces the methods on Borglet that delegate to a TimeKeeper.</p>
+
+<p>Allowing Tasks to supply Now is a step toward eliminating the dependency on Borglet. Eventually, collaborators that depend on getting Now from the Task should be changed to use a TimeKeeper directly, but this has been an accommodation to refactoring in small steps.</p>
+
+<p>Continuing the long-range goal of refactoring the Borglet Hierarchy.</p>
+</blockquote>
+
+<p>第一行描述了 CL 的作用以及改变。其余的描述讨论了具体的实现，CL 的背景，解决方案并不理想，以及未来的可能方向。它还解释了为什么正在进行此更改。</p>
+
+<h3 id="需要上下文的-小-cl">需要上下文的 小 CL</h3>
+
+<blockquote>
+<p>Create a Python3 build rule for status.py.</p>
+
+<p>This allows consumers who are already using this as in Python3 to depend on a rule that is next to the original status build rule instead of somewhere in their own tree. It encourages new consumers to use Python3 if they can, instead of Python2, and significantly simplifies some automated build file refactoring tools being worked on currently.</p>
+</blockquote>
+
+<p>第一句话描述实际做了什么。其余的描述解释了为什么正在进行更改并为审查者提供了大量背景信息。</p>
+
+<h2 id="在提交-cl-前审查描述">在提交 CL 前审查描述</h2>
+
+<p>CL 在审查期间可能会发生重大变更。在提交 CL 之前检查 CL 描述是必要的，以确保描述仍然反映了 CL 的作用。</p>
+
+<p>下一篇：<a href="../small-cls">小型 CL</a></p>
+</article>
+
+      
+<div class="book-footer justify-end">
+  
+  
+  <div>
+    <a href="https://github.com/rootsongjc/eng-practices/edit/master/content/docs/review/developer/cl-descriptions.md" target="_blank" rel="noopener">
+      <img src="/eng-practices/svg/edit.svg" alt="Edit" /> Edit this page
+    </a>
+  </div>
+  
+</div>
+
+
+      
+    </div>
+
+    
+  
+
+  <aside class="book-toc level-3 fixed">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#写好-cl-描述">写好 CL 描述</a>
+<ul>
+<li><a href="#firstline">首行</a></li>
+<li><a href="#informative">Body 是信息丰富的</a></li>
+<li><a href="#bad">糟糕的 CL 描述</a></li>
+<li><a href="#good">好的 CL 描述</a>
+<ul>
+<li><a href="#功能更新">功能更新</a></li>
+<li><a href="#重构">重构</a></li>
+<li><a href="#需要上下文的-小-cl">需要上下文的 小 CL</a></li>
+</ul></li>
+<li><a href="#在提交-cl-前审查描述">在提交 CL 前审查描述</a></li>
+</ul></li>
+</ul>
+</nav>
+  </aside>
+
+
+
+  </main>
+
+  
+  
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-93485976-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+</body>
+
+</html>

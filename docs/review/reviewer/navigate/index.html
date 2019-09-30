@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>查看 CL 的步骤 | 谷歌工程实践</title>
+
+
+<link rel="stylesheet" href="/eng-practices/book.min.3b2edc99087fbcaaa6b2f5a7f984e6f6bb9c1245c757de04c44f5a738d1b52c1.css" integrity="sha256-Oy7cmQh/vKqmsvWn&#43;YTm9rucEkXHV94ExE9ac40bUsE=">
+
+
+<script defer src="/eng-practices/search.min.4834e7e0e267233731129f6a2972a69d565a00b73996cf0ecd0477c7838d55ba.js" integrity="sha256-SDTn4OJnIzcxEp9qKXKmnVZaALc5ls8OzQR3x4ONVbo="></script>
+
+
+
+<link rel="icon" href="/eng-practices/favicon.png" type="image/x-icon">
+
+
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+  
+<meta name="baidu-site-verification" content="g8IYR9SNLF" />
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?11f7d254cfa4e0ca44b175c66d379ecc";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-TRBZ6RN');</script>
+
+
+</head>
+
+<body>
+  <input type="checkbox" class="hidden" id="menu-control" />
+  <main class="flex container">
+
+    <aside class="book-menu fixed">
+      <nav>
+<h2 class="book-brand">
+  <a href="https://jimmysong.io/eng-practices"><span>谷歌工程实践</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" placeholder="Search" id="book-search-input" maxlength="64" readonly />
+  <div class="book-search-spinner spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+    
+  
+  
+  
+
+  <style>
+  nav ul a[href$="\2f eng-practices\2f docs\2freview\2freviewer\2fnavigate\2f "] {
+      color: #004ed0;
+  }
+  </style>
+
+<ul>
+<li><a href="/eng-practices/docs/review/"><strong>谷歌代码审查指南</strong></a></li>
+<li><a href="/eng-practices/docs/review/reviewer/"><strong>代码审查者指南</strong></a>
+
+<ul>
+<li><a href="/eng-practices/docs/review/reviewer/standard/">Code Review 标准</a></li>
+<li><a href="/eng-practices/docs/review/reviewer/looking-for/">Code Review 要点</a></li>
+<li><a href="/eng-practices/docs/review/reviewer/navigate/">查看 CL 的步骤</a></li>
+<li><a href="/eng-practices/docs/review/reviewer/speed/">Code Review 速度</a></li>
+<li><a href="/eng-practices/docs/review/reviewer/comments/">如何撰写 Code Review 评论</a></li>
+<li><a href="/eng-practices/docs/review/reviewer/pushback/">处理 Code Review 中的拖延</a></li>
+</ul></li>
+<li><a href="/eng-practices/docs/review/developer/"><strong>代码开发者指南</strong></a>
+
+<ul>
+<li><a href="/eng-practices/docs/review/developer/cl-descriptions/">写好 CL 描述</a></li>
+<li><a href="/eng-practices/docs/review/developer/small-cls/">小型 CL</a></li>
+<li><a href="/eng-practices/docs/review/developer/handling-comments/">如何处理审查者的评论</a></li>
+</ul></li>
+</ul>
+
+
+
+
+
+
+
+</nav>
+
+
+<script>
+(function() {
+  var menu = document.querySelector("aside.book-menu nav");
+  addEventListener("beforeunload", function(event) {
+    localStorage.setItem("menu.scrollTop", menu.scrollTop);
+  });
+  menu.scrollTop = localStorage.getItem("menu.scrollTop");
+})();
+</script>
+
+    </aside>
+
+    <div class="book-page">
+      <header class="flex align-center justify-between book-header">
+  <label for="menu-control">
+    <img src="/eng-practices/svg/menu.svg" alt="Menu" />
+  </label>
+  <strong>查看 CL 的步骤</strong>
+</header>
+
+      
+<article class="markdown">
+
+<h1 id="查看-cl-的步骤">查看 CL 的步骤</h1>
+
+<h2 id="总结">总结</h2>
+
+<p>现在您已经知道了 <a href="../looking-for">Code Review 要点</a>，那么管理分布在多个文件中的评论的最有效方法是什么？</p>
+
+<ol>
+<li>变更是否有意义？它有很好的描述吗？</li>
+<li>首先看一下变更中最重要的部分。整体设计得好吗？</li>
+<li>以适当的顺序查看 CL 的其余部分。</li>
+</ol>
+
+<h2 id="step_one">第一步：全面了解变更</h2>
+
+<p>查看 <a href="https://google.github.io/eng-practices/review/developer/cl-descriptions.html">CL 描述</a>和 CL 大致上用来做什么事情。这种变更是否有意义？如果在最初不应该发生这样的变更，请立即回复，说明为什么不应该进行变更。当您拒绝这样的变更时，向开发人员建议应该做什么也是一个好主意。</p>
+
+<p>例如，您可能会说“看起来你已经完成一些不错的工作，谢谢！但实际上，我们正朝着删除您在这里修改的 FooWidget 系统的方向演进，所以我们不想对它进行任何新的修改。不过，您来重构下新的 BarWidget 类怎么样？“</p>
+
+<p>请注意，审查者不仅拒绝了当前的 CL 并提供了替代建议，而且他们保持礼貌地这样做。这种礼貌很重要，因为我们希望表明，即使不同意，我们也会相互尊重。</p>
+
+<p>如果您获得了多个您不想变更的 CL，您应该考虑重整开发团队的开发过程或外部贡献者的发布过程，以便在编写CL之前有更多的沟通。最好在他们完成大量工作之前说“不”，避免已经投入心血的工作现在必须被抛弃或彻底重写。</p>
+
+<h2 id="step_two">第二步：检查 CL 的主要部分</h2>
+
+<p>查找作为此 CL “主要”部分的文件。通常，包含大量的逻辑变更的文件就是 CL 的主要部分。先看看这些主要部分。这有助于为 CL 的所有较小部分提供上下文，并且通常可以加速代码审查。如果 CL 太大而无法确定哪些部分是主要部分，请向开发人员询问您应该首先查看的内容，或者要求他们<a href="../../developer/small-cls">将 CL 拆分为多个 CL</a>。</p>
+
+<p>如果在该部分发现存在一些主要的设计问题时，即使没有时间立即查看 CL 的其余部分，也应立即留下评论告知此问题。因为事实上，因为该设计问题足够严重的话，继续审查其余部分很可能只是浪费宝贵的时间，因为其他正在审查的程序可能都将无关或消失。</p>
+
+<p>立即发送这些主要设计评论非常重要，有两个主要原因：</p>
+
+<ul>
+<li>通常开发者在发出 CL 后，在等待审查时立即开始基于该 CL 的新工作。如果您正在审查的 CL 中存在重大设计问题，那么他们以后的 CL 也必须要返工。您应该赶在他们在有问题的设计上做了太多无用功之前通知他们。</li>
+<li>主要的设计变更比起小的变更来说需要更长的时间才能完成。开发人员基本都有截止日期；为了完成这些截止日期并且在代码库中仍然保有高质量代码，开发人员需要尽快开始 CL 的任何重大工作。</li>
+</ul>
+
+<h2 id="step_three">第三步：以适当的顺序查看 CL 的其余部分</h2>
+
+<p>一旦您确认整个 CL 没有重大的设计问题，试着找出一个逻辑顺序来查看文件，同时确保您不会错过查看任何文件。 通常在查看主要文件之后，最简单的方法是按照代码审查工具向您提供的顺序浏览每个文件。有时在阅读主代码之前先阅读测试也很有帮助，因为这样您就可以了解该变更应当做些什么。</p>
+
+<p>下一篇：<a href="../speed">Code Review 速度</a></p>
+</article>
+
+      
+<div class="book-footer justify-end">
+  
+  
+  <div>
+    <a href="https://github.com/rootsongjc/eng-practices/edit/master/content/docs/review/reviewer/navigate.md" target="_blank" rel="noopener">
+      <img src="/eng-practices/svg/edit.svg" alt="Edit" /> Edit this page
+    </a>
+  </div>
+  
+</div>
+
+
+      
+    </div>
+
+    
+  
+
+  <aside class="book-toc level-3 fixed">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#查看-cl-的步骤">查看 CL 的步骤</a>
+<ul>
+<li><a href="#总结">总结</a></li>
+<li><a href="#step_one">第一步：全面了解变更</a></li>
+<li><a href="#step_two">第二步：检查 CL 的主要部分</a></li>
+<li><a href="#step_three">第三步：以适当的顺序查看 CL 的其余部分</a></li>
+</ul></li>
+</ul>
+</nav>
+  </aside>
+
+
+
+  </main>
+
+  
+  
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-93485976-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+</body>
+
+</html>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>处理 Code Review 中的拖延 | 谷歌工程实践</title>
+
+
+<link rel="stylesheet" href="/eng-practices/book.min.3b2edc99087fbcaaa6b2f5a7f984e6f6bb9c1245c757de04c44f5a738d1b52c1.css" integrity="sha256-Oy7cmQh/vKqmsvWn&#43;YTm9rucEkXHV94ExE9ac40bUsE=">
+
+
+<script defer src="/eng-practices/search.min.4834e7e0e267233731129f6a2972a69d565a00b73996cf0ecd0477c7838d55ba.js" integrity="sha256-SDTn4OJnIzcxEp9qKXKmnVZaALc5ls8OzQR3x4ONVbo="></script>
+
+
+
+<link rel="icon" href="/eng-practices/favicon.png" type="image/x-icon">
+
+
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+  
+<meta name="baidu-site-verification" content="g8IYR9SNLF" />
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?11f7d254cfa4e0ca44b175c66d379ecc";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-TRBZ6RN');</script>
+
+
+</head>
+
+<body>
+  <input type="checkbox" class="hidden" id="menu-control" />
+  <main class="flex container">
+
+    <aside class="book-menu fixed">
+      <nav>
+<h2 class="book-brand">
+  <a href="https://jimmysong.io/eng-practices"><span>谷歌工程实践</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" placeholder="Search" id="book-search-input" maxlength="64" readonly />
+  <div class="book-search-spinner spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+    
+  
+  
+  
+
+  <style>
+  nav ul a[href$="\2f eng-practices\2f docs\2freview\2freviewer\2fpushback\2f "] {
+      color: #004ed0;
+  }
+  </style>
+
+<ul>
+<li><a href="/eng-practices/docs/review/"><strong>谷歌代码审查指南</strong></a></li>
+<li><a href="/eng-practices/docs/review/reviewer/"><strong>代码审查者指南</strong></a>
+
+<ul>
+<li><a href="/eng-practices/docs/review/reviewer/standard/">Code Review 标准</a></li>
+<li><a href="/eng-practices/docs/review/reviewer/looking-for/">Code Review 要点</a></li>
+<li><a href="/eng-practices/docs/review/reviewer/navigate/">查看 CL 的步骤</a></li>
+<li><a href="/eng-practices/docs/review/reviewer/speed/">Code Review 速度</a></li>
+<li><a href="/eng-practices/docs/review/reviewer/comments/">如何撰写 Code Review 评论</a></li>
+<li><a href="/eng-practices/docs/review/reviewer/pushback/">处理 Code Review 中的拖延</a></li>
+</ul></li>
+<li><a href="/eng-practices/docs/review/developer/"><strong>代码开发者指南</strong></a>
+
+<ul>
+<li><a href="/eng-practices/docs/review/developer/cl-descriptions/">写好 CL 描述</a></li>
+<li><a href="/eng-practices/docs/review/developer/small-cls/">小型 CL</a></li>
+<li><a href="/eng-practices/docs/review/developer/handling-comments/">如何处理审查者的评论</a></li>
+</ul></li>
+</ul>
+
+
+
+
+
+
+
+</nav>
+
+
+<script>
+(function() {
+  var menu = document.querySelector("aside.book-menu nav");
+  addEventListener("beforeunload", function(event) {
+    localStorage.setItem("menu.scrollTop", menu.scrollTop);
+  });
+  menu.scrollTop = localStorage.getItem("menu.scrollTop");
+})();
+</script>
+
+    </aside>
+
+    <div class="book-page">
+      <header class="flex align-center justify-between book-header">
+  <label for="menu-control">
+    <img src="/eng-practices/svg/menu.svg" alt="Menu" />
+  </label>
+  <strong>处理 Code Review 中的拖延</strong>
+</header>
+
+      
+<article class="markdown">
+
+<h1 id="处理-code-review-中的拖延">处理 Code Review 中的拖延</h1>
+
+<p>有时开发人员会拖延（Pushback）代码审查。他们要么不同意您的建议，要么抱怨您太严格。</p>
+
+<h2 id="who_is_right">谁是对的？</h2>
+
+<p>当开发人员不同意您的建议时，请先花点时间考虑一下是否正确。通常，他们比你更接近代码，所以他们可能真的对它的某些方面有更好的洞察力。他们的论点有意义吗？从代码健康的角度来看它是否有意义？如果是这样，让他们知道他们是对的，把问题解决。</p>
+
+<p>但是，开发人员并不总是对的。在这种情况下，审查人应进一步解释为什么认为他们的建议是正确的。好的解释在描述对开发人员回复的理解的同时，还会解释为什么请求更改。</p>
+
+<p>特别是，当审查人员认为他们的建议会改善代码健康状况时，他们应该继续提倡更改，如果他们认为最终的代码质量改进能够证明所需的额外工作是合理的。<strong>提高代码健康状况往往只需很小的几步。</strong></p>
+
+<p>有时需要几轮解释一个建议才能才能让对方真正理解你的用意。只要确保始终保持<a href="../comments#courtesy">礼貌</a>，让开发人员知道你有听到他们在说什么，只是你不同意该论点而已。</p>
+
+<h2 id="upsetting_developers">沮丧的开发者</h2>
+
+<p>审查者有时认为，如果审查者人坚持改进，开发人员会感到不安。有时候开发人员会感到很沮丧，但这样的感觉通常只会持续很短的时间，后来他们会非常感谢您在提高代码质量方面给他们的帮助。通常情况下，如果您在评论中表现得很有<a href="../comments#courtesy">礼貌</a>，开发人员实际上根本不会感到沮丧，这些担忧都仅存在于审核者心中而已。开发者感到沮丧通常更多地与<a href="../comments#courtesy">评论的写作方式</a>有关，而不是审查者对代码质量的坚持。</p>
+
+<h2 id="later">稍后清理</h2>
+
+<p>开发人员拖延的一个常见原因是开发人员（可以理解）希望完成任务。他们不想通过另一轮审查来完成该 CL。所以他们说会在以后的 CL 中清理一些东西，所以您现在应该 LGTM 这个 CL。一些开发人员非常擅长这一点，并会立即编写一个修复问题的后续 CL。但是，经验表明，在开发人员编写原始 CL 后，经过越长的时间这种清理发生的可能性就越小。实际上，通常除非开发人员在当前 CL 之后立即进行清理，否则它就永远不会发生。这不是因为开发人员不负责任，而是因为他们有很多工作要做，清理工作在其他工作中被丢失或遗忘。因此，在代码进入代码库并“完成”之前，通常最好坚持让开发人员现在清理他们的 CL。让人们“稍后清理东西”是代码库质量退化的常见原因。</p>
+
+<p>如果 CL 引入了新的复杂性，除非是<a href="/eng-practices/docs/review/emergencies/">紧急情况</a>，否则必须在提交之前将其清除。如果 CL 暴露了相关的问题并且现在无法解决，那么开发人员应该将 bug 记录下来并分配给自己，避免后续被遗忘。又或者他们可以选择在程序中留下 TODO 的注释并连结到刚记录下的 bug。</p>
+
+<h2 id="strictness">关于严格性的抱怨</h2>
+
+<p>如果您以前有相当宽松的代码审查，并转而进行严格的审查，一些开发人员会抱怨得非常大声。通常提高代码审查的<a href="../speed">速度</a>会让这些抱怨逐渐消失。</p>
+
+<p>有时，这些投诉可能需要数月才会消失，但最终开发人员往往会看到严格的代码审查的价值，因为他们会看到代码审查帮助生成的优秀代码。而且一旦发生某些事情时，最响亮的抗议者甚至可能会成为你最坚定的支持者，因为他们会看到审核变严格后所带来的价值。</p>
+
+<h2 id="conflicts">解决冲突</h2>
+
+<p>如果上述所有操作仍无法解决您与开发人员之间的冲突，请参阅 “<a href="../standard">Code Review 标准</a>”以获取有助于解决冲突的指导和原则。</p>
+</article>
+
+      
+<div class="book-footer justify-end">
+  
+  
+  <div>
+    <a href="https://github.com/rootsongjc/eng-practices/edit/master/content/docs/review/reviewer/pushback.md" target="_blank" rel="noopener">
+      <img src="/eng-practices/svg/edit.svg" alt="Edit" /> Edit this page
+    </a>
+  </div>
+  
+</div>
+
+
+      
+    </div>
+
+    
+  
+
+  <aside class="book-toc level-3 fixed">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#处理-code-review-中的拖延">处理 Code Review 中的拖延</a>
+<ul>
+<li><a href="#who_is_right">谁是对的？</a></li>
+<li><a href="#upsetting_developers">沮丧的开发者</a></li>
+<li><a href="#later">稍后清理</a></li>
+<li><a href="#strictness">关于严格性的抱怨</a></li>
+<li><a href="#conflicts">解决冲突</a></li>
+</ul></li>
+</ul>
+</nav>
+  </aside>
+
+
+
+  </main>
+
+  
+  
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-93485976-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+</body>
+
+</html>
